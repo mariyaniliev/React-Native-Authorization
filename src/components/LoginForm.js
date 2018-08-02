@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import * as firebase from 'firebase';
 import { Button, Card, CardSection, Input, Spiner  } from './common';
 
 class LoginForm extends Component {
@@ -13,18 +14,16 @@ class LoginForm extends Component {
     
     onButtonPress(){
         const { email, password } = this.state;
-        this.setState({ error: 'ERROR', loading: true});
-        console.log('HERE');
-        console.log(this.state.loading)
 
-        //Authenticate the user 
-        firebase.auth().signInWithEmailAndPassword(email,password)
-        .then(this.onLoginSuccess.bind(this))
-        .catch(() => {
-            firebase.auth().createUserWithEmailAndPassword(email,password)
-            .then(this.onLoginSuccess.bind(this))
-            .catch(this.onLoginFail.bind(this));
-        })
+    this.setState({ error: '', loading: true });
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(this.onLoginSuccess.bind(this))
+      .catch(() => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+          .then(this.onLoginSuccess.bind(this))
+          .catch(this.onLoginFail.bind(this));
+      });
         
     }
 
@@ -55,7 +54,7 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <Card>
+       <Card>
         <CardSection>
             <Input
             placeholder="user@gmail.com"
@@ -64,7 +63,7 @@ class LoginForm extends Component {
             onChangeText={ email => this.setState({ email })}
             />
         </CardSection>
-        {/* Password input */}
+         {/* Password input  */}
         <CardSection>
             <Input
                 secureTextEntry
